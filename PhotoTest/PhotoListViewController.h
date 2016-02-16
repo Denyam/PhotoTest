@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  PhotoListViewController.h
 //  PhotoTest
 //
 //  Created by Denis on 16/02/2016.
@@ -8,8 +8,8 @@
 
 @import Cocoa;
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+#import "PhotoCollectionItem.h"
 
-
+@interface PhotoListViewController : NSViewController
 @end
 

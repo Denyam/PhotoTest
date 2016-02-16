@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  ReplacePresentationAnimator.h
 //  PhotoTest
 //
 //  Created by Denis on 16/02/2016.
@@ -8,8 +8,6 @@
 
 @import Cocoa;
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
-
+@interface ReplacePresentationAnimator : NSObject <NSViewControllerPresentationAnimator>
 
 @end
-
