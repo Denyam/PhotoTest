@@ -720,15 +720,15 @@
             <objects>
                 <viewController storyboardIdentifier="PhotoDetailController" id="dZX-i8-YmY" customClass="PhotoDetailController" sceneMemberID="viewController">
                     <view key="view" horizontalHuggingPriority="254" verticalHuggingPriority="254" id="IQB-76-JeY">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="287"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView horizontalCompressionResistancePriority="499" verticalCompressionResistancePriority="499" translatesAutoresizingMaskIntoConstraints="NO" id="0r5-3W-74l">
-                                <rect key="frame" x="20" y="20" width="346" height="260"/>
+                                <rect key="frame" x="20" y="20" width="346" height="247"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="Gqb-ce-FNE"/>
                             </imageView>
                             <button horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tjD-Su-tuw">
-                                <rect key="frame" x="368" y="252" width="68" height="32"/>
+                                <rect key="frame" x="368" y="239" width="68" height="32"/>
                                 <buttonCell key="cell" type="push" title="Prev" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="84c-B5-MQQ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -747,14 +747,27 @@
                                     <action selector="moveDown:" target="dZX-i8-YmY" id="FLL-i3-ONG"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BeM-o9-hha">
+                                <rect key="frame" x="375" y="126" width="65" height="32"/>
+                                <buttonCell key="cell" type="push" title="Blur" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0Se-iP-1fb">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="blur:" target="dZX-i8-YmY" id="A5w-HR-H4m"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="tjD-Su-tuw" firstAttribute="leading" secondItem="0r5-3W-74l" secondAttribute="trailing" constant="8" symbolic="YES" id="1IO-3X-Y3a"/>
                             <constraint firstAttribute="bottom" secondItem="0r5-3W-74l" secondAttribute="bottom" constant="20" symbolic="YES" id="2Hs-cb-0Ns"/>
+                            <constraint firstItem="BeM-o9-hha" firstAttribute="top" relation="greaterThanOrEqual" secondItem="tjD-Su-tuw" secondAttribute="bottom" constant="12" symbolic="YES" id="7f7-ry-67L"/>
                             <constraint firstItem="0r5-3W-74l" firstAttribute="leading" secondItem="IQB-76-JeY" secondAttribute="leading" constant="20" symbolic="YES" id="Cue-xZ-nG8"/>
                             <constraint firstItem="tjD-Su-tuw" firstAttribute="top" secondItem="IQB-76-JeY" secondAttribute="top" constant="20" symbolic="YES" id="DI9-eI-0SA"/>
-                            <constraint firstItem="z4w-kg-EkE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="tjD-Su-tuw" secondAttribute="bottom" constant="12" symbolic="YES" id="E0y-xc-fAh"/>
+                            <constraint firstItem="BeM-o9-hha" firstAttribute="centerY" secondItem="IQB-76-JeY" secondAttribute="centerY" id="NKl-G8-0Wf"/>
                             <constraint firstItem="0r5-3W-74l" firstAttribute="top" secondItem="IQB-76-JeY" secondAttribute="top" constant="20" symbolic="YES" id="RGp-RP-ZPB"/>
+                            <constraint firstItem="z4w-kg-EkE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="BeM-o9-hha" secondAttribute="bottom" constant="12" symbolic="YES" id="Uln-y3-ff5"/>
+                            <constraint firstAttribute="trailing" secondItem="BeM-o9-hha" secondAttribute="trailing" constant="20" symbolic="YES" id="bXP-70-lch"/>
                             <constraint firstItem="z4w-kg-EkE" firstAttribute="leading" relation="lessThanOrEqual" secondItem="0r5-3W-74l" secondAttribute="trailing" constant="7" id="l7q-D9-qpj"/>
                             <constraint firstAttribute="trailing" secondItem="tjD-Su-tuw" secondAttribute="trailing" constant="20" symbolic="YES" id="l9w-vV-N1M"/>
                             <constraint firstAttribute="trailing" secondItem="z4w-kg-EkE" secondAttribute="trailing" constant="20" symbolic="YES" id="taA-Oh-wRt"/>

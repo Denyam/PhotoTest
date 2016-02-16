@@ -11,6 +11,8 @@
 #import "Photo.h"
 #import "PhotoStore.h"
 
+@import CoreImage;
+
 @interface PhotoDetailController ()
 @property (nonatomic) IBOutlet NSImageView *photoView;
 @end
@@ -62,6 +64,23 @@
 	if (nextPhoto) {
 		self.photo = nextPhoto;
 	}
+}
+
+- (IBAction)blur:(id)sender {
+	CIImage *inputImage = [CIImage imageWithData:self.photo.image.TIFFRepresentation];
+	CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+	[filter setDefaults];
+	[filter setValue:inputImage forKey:kCIInputImageKey];
+	CIImage *outputImage = [filter valueForKey:kCIOutputImageKey];
+	
+	NSRect outputRect = NSRectFromCGRect(outputImage.extent);
+	NSImage *blurredImage = [NSImage imageWithSize:outputRect.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+		[outputImage drawInRect:dstRect fromRect:dstRect operation:NSCompositeCopy fraction:1];
+		
+		return YES;
+	}];
+	
+	 self.photoView.image = blurredImage;
 }
 
 @end
