@@ -13,6 +13,7 @@
 - (instancetype)initWithPath:(NSString *)path;
 
 @property (nonatomic, readonly) NSString *path;
-@property (nonatomic, readonly) NSImage *image;
+
+- (void)getImageWithCompletion:(void (^)(NSImage *image))completion;
 
 @end

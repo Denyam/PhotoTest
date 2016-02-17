@@ -10,10 +10,14 @@
 
 #import <AppKit/NSImage.h>
 
+@interface Photo ()
+@property (nonatomic) NSImage *image;
+@end
+
+
 @implementation Photo
 
 @synthesize path = _path;
-@synthesize image = _image;
 
 - (instancetype)initWithPath:(NSString *)path {
 	if ((self = [self init])) {
@@ -22,11 +26,22 @@
 	return self;
 }
 
-- (NSImage *)image {
-	if (!_image) {
-		_image = [[NSImage alloc] initWithContentsOfFile:self.path];
+- (void)getImageWithCompletion:(void (^)(NSImage *))completion {
+	if (self.image) {
+		if (completion) {
+			completion(self.image);
+		}
+	} else {
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			self.image = [[NSImage alloc] initWithContentsOfFile:self.path];
+			
+			if (completion) {
+				dispatch_async(dispatch_get_main_queue(), ^{
+					completion(self.image);
+				});
+			}
+		});
 	}
-	return _image;
 }
 
 @end

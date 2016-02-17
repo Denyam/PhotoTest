@@ -15,6 +15,8 @@
 
 @interface PhotoDetailController ()
 @property (nonatomic) IBOutlet NSImageView *photoView;
+
+- (void)updateImage;
 @end
 
 @implementation PhotoDetailController
@@ -28,7 +30,7 @@
 	[super viewWillAppear];
 	
 	[self.view.window makeFirstResponder:self];
-	self.photoView.image = self.photo.image;
+	[self updateImage];
 }
 
 - (void)viewWillDisappear {
@@ -40,7 +42,7 @@
 - (void)setPhoto:(Photo *)photo {
 	if (photo != _photo) {
 		_photo = photo;
-		self.photoView.image = _photo.image;
+		[self updateImage];
 	}
 }
 
@@ -67,20 +69,32 @@
 }
 
 - (IBAction)blur:(id)sender {
-	CIImage *inputImage = [CIImage imageWithData:self.photo.image.TIFFRepresentation];
-	CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
-	[filter setDefaults];
-	[filter setValue:inputImage forKey:kCIInputImageKey];
-	CIImage *outputImage = [filter valueForKey:kCIOutputImageKey];
-	
-	NSRect outputRect = NSRectFromCGRect(outputImage.extent);
-	NSImage *blurredImage = [NSImage imageWithSize:outputRect.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
-		[outputImage drawInRect:dstRect fromRect:dstRect operation:NSCompositeCopy fraction:1];
-		
-		return YES;
+	[self.photo getImageWithCompletion:^(NSImage *originalImage) {
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			CIImage *inputImage = [CIImage imageWithData:originalImage.TIFFRepresentation];
+			CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+			[filter setDefaults];
+			[filter setValue:inputImage forKey:kCIInputImageKey];
+			CIImage *outputImage = [filter valueForKey:kCIOutputImageKey];
+			
+			NSRect outputRect = NSRectFromCGRect(outputImage.extent);
+			NSImage *blurredImage = [NSImage imageWithSize:outputRect.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+				[outputImage drawInRect:dstRect fromRect:dstRect operation:NSCompositeCopy fraction:1];
+				
+				return YES;
+			}];
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+				self.photoView.image = blurredImage;
+			});
+		});
 	}];
-	
-	 self.photoView.image = blurredImage;
+}
+
+- (void)updateImage {
+	[self.photo getImageWithCompletion:^(NSImage *image) {
+		self.photoView.image = image;
+	}];
 }
 
 @end

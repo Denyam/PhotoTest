@@ -29,7 +29,9 @@ NSString *const kPhotoCollectionItemId = @"PhotoCollectionItem";
 	
 	Photo *photo = [PhotoStore instance].photos[indexPath.item];
 	result.representedObject = photo;
-	result.imageView.image = photo.image;
+	[photo getImageWithCompletion:^(NSImage *image) {
+		result.imageView.image = image;
+	}];
 	
 	return result;
 }
