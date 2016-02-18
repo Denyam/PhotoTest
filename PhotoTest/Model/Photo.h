@@ -15,5 +15,6 @@
 @property (nonatomic, readonly) NSString *path;
 
 - (void)getImageWithCompletion:(void (^)(NSImage *image))completion;
+- (void)getImageToFit:(NSSize)size withCompletion:(void (^)(NSImage *))completion;
 
 @end

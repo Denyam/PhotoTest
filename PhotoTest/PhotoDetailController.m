@@ -92,7 +92,7 @@
 }
 
 - (void)updateImage {
-	[self.photo getImageWithCompletion:^(NSImage *image) {
+	[self.photo getImageToFit:self.photoView.frame.size withCompletion:^(NSImage *image) {
 		self.photoView.image = image;
 	}];
 }

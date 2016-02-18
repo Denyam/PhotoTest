@@ -29,7 +29,10 @@ NSString *const kPhotoCollectionItemId = @"PhotoCollectionItem";
 	
 	Photo *photo = [PhotoStore instance].photos[indexPath.item];
 	result.representedObject = photo;
-	[photo getImageWithCompletion:^(NSImage *image) {
+	
+	NSSize size = [collectionView.collectionViewLayout layoutAttributesForItemAtIndexPath:indexPath].size;
+	
+	[photo getImageToFit:size withCompletion:^(NSImage *image) {
 		result.imageView.image = image;
 	}];
 	

@@ -11,7 +11,7 @@
 #import <AppKit/NSImage.h>
 
 @interface Photo ()
-@property (nonatomic) NSImage *image;
+- (NSImage *)resizedImage:(NSImage *)image toFit:(NSSize)size;
 @end
 
 
@@ -27,21 +27,46 @@
 }
 
 - (void)getImageWithCompletion:(void (^)(NSImage *))completion {
-	if (self.image) {
+	[self getImageToFit:NSZeroSize withCompletion:completion];
+}
+
+- (void)getImageToFit:(NSSize)size withCompletion:(void (^)(NSImage *))completion {
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		NSImage *image = [[NSImage alloc] initWithContentsOfFile:self.path];
+		image = [self resizedImage:image toFit:size];
+		
 		if (completion) {
-			completion(self.image);
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completion(image);
+			});
 		}
-	} else {
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			self.image = [[NSImage alloc] initWithContentsOfFile:self.path];
-			
-			if (completion) {
-				dispatch_async(dispatch_get_main_queue(), ^{
-					completion(self.image);
-				});
-			}
-		});
+	});
+}
+
+- (NSImage *)resizedImage:(NSImage *)image toFit:(NSSize)size {
+	NSImage *result = image;
+	
+	if ((size.width != 0) && (size.height != 0)) {
+		NSSize originalSize = image.size;
+		NSSize destinationSize = size;
+		
+		CGFloat sourceAspectRatio = originalSize.width / originalSize.height;
+		CGFloat destinationAspectRatio = size.width / size.height;
+		if (destinationAspectRatio > sourceAspectRatio) {
+			destinationSize.width = size.height * sourceAspectRatio;
+		} else if (destinationAspectRatio < sourceAspectRatio) {
+			destinationSize.height = size.width / sourceAspectRatio;
+		}
+		
+		if (destinationAspectRatio != sourceAspectRatio) {
+			result = image.copy;
+			result.size = destinationSize;
+			[result lockFocus];
+			[result unlockFocus];
+		}
 	}
+	
+	return result;
 }
 
 @end
